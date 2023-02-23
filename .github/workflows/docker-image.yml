@@ -1,0 +1,33 @@
+name: Deploy to Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: naitikbhise
+          password: BaluRutu@4263
+      - name: Build Docker image
+        run: docker build -t my-flask-app .
+      - name: Push Docker image
+        run: docker push my-flask-app
+      - name: Deploy Docker container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            docker stop eff22164c243 || true
+            docker rm eff22164c243 || true
+            docker pull my-flask-app
+            docker run -d -p 5000:5000 --name eff22164c243 my-flask-app
