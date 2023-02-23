@@ -1,0 +1,7 @@
+torch==1.13.1
+requests==2.12.4
+torchaudio==0.13.1
+torchsummary==1.5.1
+torchvision==0.14.1
+Flask==2.2.1
+Pillow==9.2.0
